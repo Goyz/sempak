@@ -1,0 +1,86 @@
+<div  class="sidebar fixed" id="sidebar">
+	<ul class="nav nav-list">
+		<li>
+			<a href="javascript:void(0);" onclick="loadUrl('{$host}beranda');$('#judul_kecil').html('Dashboard App')">
+				<i class="icon-bar-chart"></i>
+				<span class="menu-text">Dashboard 1</span>
+			</a>
+		</li>
+		
+		
+		<li>
+			<a href="javascript:void(0);"  class="dropdown-toggle" >
+				<i class="icon-briefcase"></i>
+				<span class="menu-text">Data Transaksi</span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li>
+					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/trans_buku_sekolah/B');$('#judul_kecil').html('Transaksi Aldeaz Buku Sekolah')">
+						<i class="icon-double-angle-right"></i>
+						<span class="menu-text">Transaksi Buku Sekolah</span>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/trans_buku_umum/B');$('#judul_kecil').html('Transaksi Aldeaz Buku Umum')">
+						<i class="icon-double-angle-right"></i>
+						<span class="menu-text">Transaksi Buku Umum</span>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/trans_media_sekolah/M');$('#judul_kecil').html('Transaksi Aldeaz Media Sekolah')">
+						<i class="icon-double-angle-right"></i>
+						<span class="menu-text">Transaksi Media Sekolah</span>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Grid/trans_media_umum/M');$('#judul_kecil').html('Transaksi Aldeaz Media Umum')">
+						<i class="icon-double-angle-right"></i>
+						<span class="menu-text">Transaksi Media Umum</span>
+					</a>
+				</li>
+				
+			</ul>
+		</li>
+		
+		<li>
+			<a href="javascript:void(0);"  class="dropdown-toggle" >
+				<i class="icon-book"></i>
+				<span class="menu-text">Report</span>
+				<b class="arrow icon-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<li>
+					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Report/inv_paid');$('#judul_kecil').html('Report Invoice Paid')">
+						<i class="icon-double-angle-right"></i>
+						<span class="menu-text">Report Aldeaz Buku Per Invoice</span>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Report/inv_unpaid');$('#judul_kecil').html('Report Invoice UnPaid')">
+						<i class="icon-double-angle-right"></i>
+						<span class="menu-text">Report Aldeaz Buku Per Detil Invoice</span>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Report/unit');$('#judul_kecil').html('Report Property Owner List')">
+						<i class="icon-double-angle-right"></i>
+						<span class="menu-text">Report Aldeaz Media Per Invoice</span>
+					</a>
+				</li>
+				<li>
+					<a href="javascript:void(0);" onclick="loadUrl('{$host}Backoffice-Report/registrasi');$('#judul_kecil').html('Report Owner Registration')">
+						<i class="icon-double-angle-right"></i>
+						<span class="menu-text">Report Aldeaz Media Per Detil Invoice</span>
+					</a>
+				</li>
+			</ul>
+		</li>
+		
+		
+	</ul><!--/.nav-list-->
+
+	<div class="sidebar-collapse" id="sidebar-collapse">
+		<i class="icon-double-angle-left"></i>
+	</div>
+</div>

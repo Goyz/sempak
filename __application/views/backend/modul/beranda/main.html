@@ -1,0 +1,48 @@
+<div class="page-header position-relative">
+	<h1>
+		Dashboard
+		<small>
+			<i class="icon-double-angle-right"></i>
+			overview &amp; stats
+		</small>
+	</h1>
+</div><!--/.page-header-->
+
+<div class="row-fluid">
+	<div class="widget-box span6">
+		<div class="widget-header header-color-blue2">
+			<h4 class="lighter smaller">Transaksi Independent</h4>
+		</div>
+
+		<div class="widget-body">
+			<div class="widget-main padding-8">
+				<div id='charttable_{$acak}'></div>
+			</div>
+		</div>
+	</div>
+	<div class="widget-box span6">
+		<div class="widget-header header-color-blue2">
+			<h4 class="lighter smaller">Transaksi Paket</h4>
+		</div>
+
+		<div class="widget-body">
+			<div class="widget-main padding-8">
+				<div id='charttable2_{$acak}' style="background:#ffffff;"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$.post(host+'backoffice-GetDataChart',{ mod:'penjualan_inde' },function(r){
+		var x=JSON.parse(r);
+		chart_na('charttable_{$acak}',"line","Invoice Independent 7 Last Day",'',"",x.x,x.y,"");
+	});
+	$.post(host+'backoffice-GetDataChart',{ mod:'penjualan_paket' },function(r){
+		var x=JSON.parse(r);
+		chart_na('charttable2_{$acak}',"line","Invoice Package 7 Last Day  ",'',"",x.x,x.y,"");
+	});
+	//chart_na('charttable_{$acak}',"line","Jumlah Buku Terlaris",'',"",'','',"");
+	//chart_na('charttable2_{$acak}',"line","Jumlah Buku Terlaris",'',"",'','',"");
+</script>	
+			
