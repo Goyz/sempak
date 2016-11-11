@@ -51,4 +51,7 @@ class Login extends JINGGA_Controller {
 		//}
 	}
 	
+	function viewregistrasi(){
+		$this->nsmarty->display( 'backend/main-register.html');
+	}
 }

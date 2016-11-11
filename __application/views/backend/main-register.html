@@ -1,0 +1,76 @@
+<!DOCTYPE html> 
+<html>
+<head>
+	<title>Aldeaz Marketing App</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="{$host}__assets/form/css/demo.css" />
+	<link rel="stylesheet" href="{$host}__assets/form/css/sky-forms.css" />
+</head>
+<body class="bg-orange">
+	<div class="body body-s">
+		<form class="sky-form" name='frmRegister' url="{$host}backoffice-masuk" method="post">
+			<header><center><img src='{$host}__assets/img/logo-aldeaz.png' /></center></header>
+			<fieldset>
+				<section>
+					<label class="input">
+						<i class="icon-append icon-user"></i>
+						<input type="text" placeholder="Alaamt Email" />
+					</label>
+				</section>
+				<section>
+					<label class="input">
+						<i class="icon-append icon-envelope-alt"></i>
+						<input type="text" placeholder="Nama Lengkap" />
+					</label>
+				</section>
+				<section>
+					<label class="select">
+						<select>
+							<option value="0" selected disabled>Provinsi</option>
+						</select>
+						<i></i>
+					</label>
+				</section>
+				<section>
+					<label class="select">
+						<select>
+							<option value="0" selected disabled>Kab/Kota</option>
+						</select>
+						<i></i>
+					</label>
+				</section>
+				<section>
+					<label class="select">
+						<select>
+							<option value="0" selected disabled>Kecamatan</option>
+						</select>
+						<i></i>
+					</label>
+				</section>
+				<section>
+					<label class="input">
+						<i class="icon-append icon-tag"></i>
+						<input type="text" placeholder="Kode Pos" />
+					</label>
+				</section>
+				<section>
+					<label class="textarea">
+						<textarea placeholder="alamat"></textarea>
+					</label>
+				</section>
+				<section>
+					<label class="input">
+						<i class="icon-append icon-mobile-phone"></i>
+						<input type="text" placeholder="No. Handphone" />
+					</label>
+				</section>
+			</fieldset>
+			<footer>
+				<a type="submit" class="button">Daftar Sekarang</a>
+				<a href='{$host}' class="button button-secondary">Masuk</a>
+			</footer>
+		</form>
+	</div>
+</body>
+</html>
