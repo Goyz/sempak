@@ -26,7 +26,9 @@ class Backend extends JINGGA_Controller {
 		if($this->auth){
 			switch($p1){
 				case "beranda":
-					
+					$data=$this->mbackend->getdata('dashboard','result_array');
+					//echo "<pre>";print_r($data);
+					$this->nsmarty->assign('data',$data);
 				break;
 			}
 			
@@ -89,12 +91,22 @@ class Backend extends JINGGA_Controller {
 		$this->nsmarty->assign('mod',$mod);
 		$temp="backend/modul/".$mod.".html";
 		switch($mod){
-			case "kalender_reservasi":
-				$id_trans=$this->input->post('id_trans');
-				$id_detil=$this->input->post('id_detil');
-				$this->nsmarty->assign('id_trans',$id_trans);
-				$this->nsmarty->assign('id_detil',$id_detil);
-				$data=$this->mbackend->getdata('data_inv','row_array');
+			case "trans_buku_sekolah":
+			case "trans_buku_umum":
+				//if($mod=='gudang_konfirmasi'){}
+				$cetak=$this->input->post('flag_cetak');
+				$temp="backend/modul/invoice.html";
+				$data=$this->mbackend->getdata('get_pemesanan_buku','result_array');
+				//echo "<pre>";print_r($data);
+				$this->nsmarty->assign('data',$data);
+			break;
+			case "trans_media_sekolah":
+			case "trans_media_umum":
+				//if($mod=='gudang_konfirmasi'){}
+				$cetak=$this->input->post('flag_cetak');
+				$temp="backend/modul/invoice.html";
+				$data=$this->mbackend->getdata('get_pemesanan_media','result_array');
+				//echo "<pre>";print_r($data);
 				$this->nsmarty->assign('data',$data);
 			break;
 			case "reservation":
@@ -443,12 +455,6 @@ class Backend extends JINGGA_Controller {
 		$x=array();
 		$y=array();
 		$mod=$this->input->post('mod');
-		
-		
-		
-		
-		//echo json_encode($tgl);exit;
-		//print_r($tgl);exit;
 		switch($mod){
 			case "penjualan_inde":
 				$tgl_akhir=date('Y-m-d');

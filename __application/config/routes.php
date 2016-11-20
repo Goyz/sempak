@@ -17,7 +17,7 @@ $route['backoffice-GetDetil'] = 'backend/get_konten';
 $route['backoffice-konten/(:any)'] = 'backend/get_konten/$1';
 $route['Backoffice-Report/(:any)'] = 'backend/get_report/$1';
 $route['backoffice-simpan/(:any)/(:any)'] = 'backend/simpandata/$1/$2';
-
+$route['beranda'] = 'backend/modul/beranda/main';
 $route['registrasi'] = 'login/viewregistrasi';
 
 

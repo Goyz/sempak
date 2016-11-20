@@ -244,6 +244,87 @@ function genGrid(modnya, divnya, lebarnya, tingginya, par1,db_flag){
 		param['db_flag']=db_flag;
 	}
 	switch(modnya){
+		case "monitoring_buku":
+		case "monitoring_media":
+			judulnya = (modnya=='monitoring_buku' ? "Monitoring Order Buku " : "Monitoring Order Media");
+			urlnya = modnya;
+			fitnya = true;
+			nowrap=false;
+			row_number=true;
+			urlglobal = host+'backoffice-Data/'+urlnya;
+			kolom[modnya] = [	
+				{field:'no_order',title:'No. Order',width:200, halign:'center',align:'left'},
+				{field:'status_order',title:'Status Order',width:150, halign:'center',align:'center',
+					formatter:function(value,rowData,rowIndex){
+						if(value=='P'){
+							return "Proses Pembayaran";
+						}else if(value=='F'){
+							return "Sudah DiBayar";
+						}else{
+							return "-";
+						}
+					},
+					styler:function(value,rowData,rowIndex){
+						if(value=='P'){return 'background:green;color:#ffffff;'}
+						else if(value=='F'){return 'background:white;color:navy;'}
+						else {return 'background:red;color:navy;'}
+					}
+				},
+				{field:'status_konfirmasi',title:'Status Konfirmasi',width:150, halign:'center',align:'center',
+					formatter:function(value,rowData,rowIndex){
+						if(value=='P'){
+							return "Tunggu Konfirmasi";
+						}else if(value=='F'){
+							return "Sudah Dikonfirmasi";
+						}else{
+							return "-";
+						}
+					},
+					styler:function(value,rowData,rowIndex){
+						if(value=='P'){return 'background:green;color:#ffffff;'}
+						else if(value=='F'){return 'background:white;color:navy;'}
+						else {return 'background:red;color:navy;'}
+					}
+				},
+				{field:'status_gudang',title:'Status Gudang',width:180, halign:'center',align:'center',
+					formatter:function(value,rowData,rowIndex){
+						if(value=='P'){
+							return "Tunggu Konfirmasi Packing";
+						}else if(value=='PK'){
+							return "Proses Packing";
+						}else if(value=='F'){
+							return "Proses Pengiriman";
+						}else{
+							return "-";
+						}
+					},
+					styler:function(value,rowData,rowIndex){
+						if(value=='P'){return 'background:green;color:#ffffff;'}
+						else if(value=='PK'){return 'background:yellow;color:navy;'}
+						else if(value=='F'){return 'background:white;color:navy;'}
+						else {return 'background:red;color:navy;'}
+					}
+				},
+				{field:'status_kirim',title:'Status Pengiriman',width:150, halign:'center',align:'center',
+					formatter:function(value,rowData,rowIndex){
+						if(value=='P'){
+							return "Proses Pengiriman";
+						}else if(value=='F'){
+							return "Sudah Dikirim";
+						}else{
+							return "-";
+						}
+					},
+					styler:function(value,rowData,rowIndex){
+						if(value=='P'){return 'background:green;color:#ffffff;'}
+						else if(value=='F'){return 'background:white;color:navy;'}
+						else {return 'background:red;color:navy;'}
+					}
+				},
+				{field:'no_resi',title:'No Resi',width:150, halign:'center',align:'center'}
+				
+			];
+		break;
 		case "trans_buku_sekolah":
 		case "trans_buku_umum":
 			judulnya = (modnya=='trans_buku_sekolah' ? "Daftar Invoice Order Pelanggan Sekolah" : "Daftar Invoice Order Pelanggan Umum");
@@ -255,7 +336,8 @@ function genGrid(modnya, divnya, lebarnya, tingginya, par1,db_flag){
 			frozen[modnya] = [	
 				{field:'id',title:'Lihat Detil',width:80, halign:'center',align:'center',
 					formatter:function(value,rowData,rowIndex){
-						return "<a href='javascript:void(0);' class='btn btn-small' onclick='get_detil(\""+modnya+"\",\""+value+"\")'><img src='"+host+"__assets/easyui/themes/icons/cost_object.png'></a>";
+						var db_flag='B';
+						return "<a href='javascript:void(0);' class='btn btn-small' onclick='get_detil(\""+modnya+"\",\""+value+"\",\""+db_flag+"\")'><img src='"+host+"__assets/easyui/themes/icons/cost_object.png'></a>";
 					}
 				},
 				{field:'status',title:'Status',width:120, halign:'center',align:'left',
@@ -312,7 +394,8 @@ function genGrid(modnya, divnya, lebarnya, tingginya, par1,db_flag){
 			frozen[modnya] = [	
 				{field:'id',title:'Lihat Detil',width:80, halign:'center',align:'center',
 					formatter:function(value,rowData,rowIndex){
-						return "<a href='javascript:void(0);' class='btn btn-small' onclick='get_detil(\""+modnya+"\",\""+value+"\")'><img src='"+host+"__assets/easyui/themes/icons/cost_object.png'></a>";
+						var db_flag='M';
+						return "<a href='javascript:void(0);' class='btn btn-small' onclick='get_detil(\""+modnya+"\",\""+value+"\",\""+db_flag+"\")'><img src='"+host+"__assets/easyui/themes/icons/cost_object.png'></a>";
 					}
 				},
 				{field:'status',title:'Status',width:120, halign:'center',align:'left',
@@ -885,7 +968,7 @@ function cariData(acak){
 	}
 	//$('#grid_'+typecari).datagrid('reload', post_search);
 }
-function get_detil(mod,id_data){
+function get_detil(mod,id_data,db_flag){
 	switch(mod){
 		case "cetak_bast":
 			openWindowWithPost(host+'backoffice-Cetak',{mod:mod,id:id_data});
@@ -933,7 +1016,7 @@ function get_detil(mod,id_data){
 		default:
 			$('#grid_nya_'+mod).hide();
 			$('#detil_nya_'+mod).html('').show().addClass("loading");
-			$.post(host+'backoffice-GetDetil',{mod:mod,id:id_data},function(r){
+			$.post(host+'backoffice-GetDetil',{mod:mod,id:id_data,db_flag:db_flag},function(r){
 				$('#detil_nya_'+mod).html(r).removeClass("loading");
 			});
 		break;

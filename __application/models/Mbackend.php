@@ -16,7 +16,78 @@ class Mbackend extends CI_Model{
 			$this->get_koneksi($this->input->post('db_flag'));
 		}
 		switch($type){
-			
+			case "dashboard":
+				$data=array();
+				$sql_na="SELECT A.no_order,A.grand_total 
+						FROM tbl_h_pemesanan A
+						LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id ";
+				$order="ORDER BY A.tgl_order DESC
+						LIMIT 0,5 ";
+				$this->get_koneksi('B');
+				$where =" WHERE B.jenis_pembeli='SEKOLAH' ";
+				$sql=$sql_na.$where.$order;
+				$data['trans_buku_sekolah']=$this->db_remote->query($sql)->result_array();
+				$where =" WHERE B.jenis_pembeli='UMUM' ";
+				$sql=$sql_na.$where.$order;
+				$data['trans_buku_umum']=$this->db_remote->query($sql)->result_array();
+				$this->db_remote->close();
+				$this->get_koneksi('M');
+				$where =" WHERE B.jenis_pembeli='SEKOLAH' ";
+				$sql=$sql_na.$where.$order;
+				$data['trans_media_sekolah']=$this->db_remote->query($sql)->result_array();
+				$where =" WHERE B.jenis_pembeli='UMUM' ";
+				$sql=$sql_na.$where.$order;
+				$data['trans_media_umum']=$this->db_remote->query($sql)->result_array();
+				$this->db_remote->close();
+				return $data;
+			break;
+			case "monitoring_buku":
+			case "monitoring_media":
+				$sql="SELECT A.no_order,A.`status` as status_order,B.flag as status_konfirmasi,
+						C.flag as status_gudang,D.`status` as status_kirim,D.no_resi
+						FROM tbl_h_pemesanan A
+						LEFT JOIN (
+							SELECT A.tbl_h_pemesanan_id,A.flag,A.id FROM tbl_konfirmasi A
+						)AS B ON B.tbl_h_pemesanan_id=A.id
+						LEFT JOIN (
+							SELECT A.tbl_h_pemesanan_id,A.tbl_konfirmasi_id,A.flag 
+							FROM tbl_gudang A
+						)AS C ON (C.tbl_h_pemesanan_id=A.id AND C.tbl_konfirmasi_id=B.id)
+						LEFT JOIN (
+							SELECT A.tbl_h_pemesanan_id,A.`status`,A.no_resi 
+							FROM tbl_tracking_pengiriman A
+						)AS D ON D.tbl_h_pemesanan_id=A.id ".$where;
+			break;
+			case "get_pemesanan_buku":
+				$data=array();
+				$id=$this->input->post('id');
+				if($id)$where .=" AND A.id=".$id;
+				$sql="SELECT A.*,B.nama_sekolah,B.nama_lengkap,B.jenis_pembeli 
+					  FROM tbl_h_pemesanan A 
+					  LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id ".$where;
+				$data['header']=$this->db_remote->query($sql)->row_array();
+				$sql="SELECT A.*,B.judul_buku,(A.qty*A.harga)as total
+					  FROM tbl_d_pemesanan A 
+					  LEFT JOin tbl_buku B ON A.tbl_buku_id=B.id
+					  WHERE A.tbl_h_pemesanan_id=".$id;
+				$data['detil']=$this->db_remote->query($sql)->result_array();
+				return $data;
+			break;
+			case "get_pemesanan_media":
+				$data=array();
+				$id=$this->input->post('id');
+				if($id)$where .=" AND A.id=".$id;
+				$sql="SELECT A.*,B.nama_sekolah,B.nama_lengkap,B.jenis_pembeli 
+					  FROM tbl_h_pemesanan A 
+					  LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id ".$where;
+				$data['header']=$this->db_remote->query($sql)->row_array();
+				$sql="SELECT A.*,B.judul_produk,(A.qty*A.harga)as total
+					  FROM tbl_d_pemesanan A 
+					  LEFT JOin tbl_produk B ON A.tbl_produk_id=B.id
+					  WHERE A.tbl_h_pemesanan_id=".$id;
+				$data['detil']=$this->db_remote->query($sql)->result_array();
+				return $data;
+			break;
 			case "data_login":
 				$sql = "
 					SELECT A.member_user,A.email_address,A.flag AS status,A.pwd,B.*,
