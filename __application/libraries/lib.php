@@ -112,38 +112,27 @@ class lib {
 		$html = "";
 		$subject = "";
 		switch($type){
-			case "email_invoice":
-				$ci->nsmarty->assign('data_cart', $p1);
-				$ci->nsmarty->assign('penunjang', $p2);
-				$html = $ci->nsmarty->fetch('frontend/modul/email_invoice.html');
-				$subject = "EMAIL INVOICE - ".$p2['no_order'];
-			break;
-			case "email_konfirmasi":	
-				$ci->nsmarty->assign('no_order', $p1);
-				$subject = "EMAIL KONFIRMASI PEMBAYARAN";
-				$html = $ci->nsmarty->fetch('frontend/modul/email_konfirmasi.html');
-			break;
-			case "email_pembatalan":
-				$ci->nsmarty->assign('kode_pembatalan', $p1);
-				$ci->nsmarty->assign('no_order', $p2);
-				$html = $ci->nsmarty->fetch('frontend/modul/email_pembatalan.html');
-				$subject = "EMAIL PEMBATALAN PESANAN";
+			case "email_register":
+				$ci->nsmarty->assign('email', $email);
+				$ci->nsmarty->assign('password', $p1);
+				$html = $ci->nsmarty->fetch('backend/email-register.html');
+				$subject = "EMAIL REGISTRASI TOOLS MARKETING ALDEAZ";
 			break;
 		}
 		
-		/*
+		
 		$config = array(
 			"protocol"	=>"smtp"
 			,"mailtype" => "html"
-			,"smtp_host" => "ssl://server.jingga.co.id"
-			,"smtp_user" => "webstore@aldeaz.id"
-			,"smtp_pass" => "merdeka18"
+			,"smtp_host" => "ssl://smtp.gmail.com"
+			,"smtp_user" => "triwahyunugros@gmail.com"
+			,"smtp_pass" => "ms6713saa"
 			,"smtp_port" => "465",
 			'charset' => 'utf-8',
             'wordwrap' => TRUE,
 		);
-		*/
 		
+		/*
 		$config = array(
 			"protocol"	=>"smtp"
 			,"mailtype" => "html"
@@ -154,7 +143,7 @@ class lib {
 			'charset' => 'utf-8',
             'wordwrap' => TRUE,
 		);
-		
+		*/
 		//,"smtp_user" => "aldeaz.id@gmail.com","smtp_pass" => "merdeka18" */
 		
 		$ci->email->initialize($config);

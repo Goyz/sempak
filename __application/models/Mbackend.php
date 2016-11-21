@@ -90,8 +90,7 @@ class Mbackend extends CI_Model{
 			break;
 			case "data_login":
 				$sql = "
-					SELECT A.member_user,A.email_address,A.flag AS status,A.pwd,B.*,
-					CONCAT(B.name_first,' ',B.name_last) AS nama_lengkap
+					SELECT A.member_user,A.email_address,A.flag AS status,A.pwd,B.*
 					FROM tbl_member A
 					LEFT JOIN tbl_registration B ON A.tbl_registration_id=B.id
 					WHERE A.member_user = '".$p1."' OR A.email_address='".$p1."'
@@ -198,10 +197,26 @@ class Mbackend extends CI_Model{
 	}
 	function get_combo($type="", $p1="", $p2=""){
 		switch($type){
-			case "cl_kategori":
+			case "cl_provinsi":
 				$sql = "
-					SELECT id, nama_kategori as txt
-					FROM cl_kategori
+					SELECT kode_prov as id, provinsi as txt
+					FROM cl_provinsi
+				";
+			break;
+			case "cl_kab_kota":
+				$provinsi = $this->input->post('v2');
+				$sql = "
+					SELECT kode_kab_kota as id, kab_kota as txt
+					FROM cl_kab_kota
+					WHERE cl_provinsi_kode = '".$provinsi."'
+				";
+			break;
+			case "cl_kecamatan":
+				$kab_kota = $this->input->post('v2');
+				$sql = "
+					SELECT kode_kecamatan as id, kecamatan as txt
+					FROM cl_kecamatan
+					WHERE cl_kab_kota_kode = '".$kab_kota."'
 				";
 			break;
 		}

@@ -52,6 +52,62 @@ class Login extends JINGGA_Controller {
 	}
 	
 	function viewregistrasi(){
+		$this->nsmarty->assign('cl_provinsi_id', $this->lib->fillcombo('cl_provinsi', 'return') );
 		$this->nsmarty->display( 'backend/main-register.html');
 	}
+	
+	function submitregistrasi(){
+		$this->load->library('encrypt');
+		
+		$post = array();
+		foreach($_POST as $k=>$v){
+			if($this->input->post($k)!=""){
+				$post[$k] = $this->input->post($k);
+			}else{
+				$post[$k] = null;
+			}
+		}
+		
+		//echo "<pre>";
+		//print_r($post);exit;
+		
+		$array_register = array(
+			'registration_date' => date('Y-m-d H:i:s'),
+			'nama_lengkap' => $post['edNmLengkap'],
+			'email_address' => $post['edMail'],
+			'cl_provinsi_id' => $post['edProvID'],
+			'cl_kab_kota_id' => $post['edKabKotaID'],
+			'cl_kecamatan_id' => $post['edKecID'],
+			'kode_pos' => $post['edKdPos'],
+			'alamat' => $post['edAlamatLengkap'],
+			'no_handphone' => $post['edNoHP'],
+		);
+		$register = $this->db->insert('tbl_registration', $array_register);
+		if($register){
+			$getregister = $this->db->get_where('tbl_registration', array('email_address'=>$post['edMail']) )->row_array();
+			$pswd = $this->lib->randomString(6, 'huruf');
+			$array_member = array(
+				'member_user' => $this->lib->randomString(5, 'angkahuruf'),
+				'email_address' => $post['edMail'],
+				'pwd' => $this->encrypt->encode($pswd),
+				'tbl_registration_id' => $getregister['id'],
+				'flag' => 1,
+				'create_date' => date('Y-m-d H:i:s'),
+				'create_by' => "SYS",
+			);
+			$member = $this->db->insert('tbl_member', $array_member);
+			if($member){
+				$kirim_email = $this->lib->kirimemail('email_register', $post['edMail'], $pswd);
+				if($kirim_email){
+					echo 1;
+				}
+			}
+		}
+		
+	}
+	
+	function getcombo($type=""){
+		echo $this->lib->fillcombo($type, 'return');
+	}
+	
 }
