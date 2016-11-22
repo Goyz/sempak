@@ -22,7 +22,7 @@ $route['registrasi'] = 'login/viewregistrasi';
 $route['submit-register'] = 'login/submitregistrasi';
 $route['getkab'] = 'login/getcombo/cl_kab_kota';
 $route['getkec'] = 'login/getcombo/cl_kecamatan';
-
+$route['backoffice-Cetak'] = 'backend/cetak';
 
 
 

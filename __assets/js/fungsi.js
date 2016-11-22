@@ -1207,12 +1207,17 @@ function set_flag(mod,msgr,id,msg,act){
 }
 function get_report(mod,acak){
 	var param={};
+	param['start_date']=$('#start_date_'+acak).datebox('getValue');
+	param['end_date']=$('#end_date_'+acak).datebox('getValue');
+	param['type_trans']=$('#type_transaction_'+acak).val();
 	switch (mod){
-		case "report_inv_paid":
-		case "report_inv_unpaid":
-			param['start_date']=$('#start_date_'+acak).datebox('getValue');
-			param['end_date']=$('#end_date_'+acak).datebox('getValue');
-			param['type_trans']=$('#type_transaction_'+acak).val();
+		case "report_inv_buku":
+		case "report_inv_detil_buku":
+			param['db_flag']='B';
+		break;
+		case "report_inv_media":
+		case "report_inv_detil_media":
+			param['db_flag']='B';
 		break;
 	}
 	$('#isi_report_'+acak).addClass('loading').html('');
@@ -1296,4 +1301,35 @@ function gen_kalender(id_div,height,data_kalender,mulai){
 
 			}
     })
+}
+var newWindow;
+function openWindowWithPost(url,params)
+{
+    var x = Math.floor((Math.random() * 10) + 1);
+	
+	if (!newWindow || typeof(newWindow)=="undefined"){
+		newWindow = window.open(url, 'winpost'); 
+	}else{
+		newWindow.close();
+		newWindow = window.open(url, 'winpost'); 
+		//return false;
+	}
+	
+	var formid= "formid"+x;
+    var html = "";
+    html += "<html><head></head><body><form  id='"+formid+"' method='post' action='" + url + "'>";
+
+    $.each(params, function(key, value) {
+        if (value instanceof Array || value instanceof Object) {
+            $.each(value, function(key1, value1) { 
+                html += "<input type='hidden' name='" + key + "["+key1+"]' value='" + value1 + "'/>";
+            });
+        }else{
+            html += "<input type='hidden' name='" + key + "' value='" + value + "'/>";
+        }
+    });
+   
+    html += "</form><script type='text/javascript'>document.getElementById(\""+formid+"\").submit()</script></body></html>";
+    newWindow.document.write(html);
+    return newWindow;
 }

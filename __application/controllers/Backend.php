@@ -53,31 +53,26 @@ class Backend extends JINGGA_Controller {
 	
 	
 	function get_report($mod){
-		$temp="backend/modul/report/".$mod.".html";
+		$temp="backend/report/".$mod.".html";
 		$this->nsmarty->assign('mod',$mod);
 		switch($mod){	
-			case "inv_paid":
-			case "inv_unpaid":
-			case "unit":
-			case "registrasi":
+			case "inv_buku":
+			case "inv_detil_buku":
+			case "inv_media":
+			case "inv_detil_media":
 				$temp="backend/modul/report/report_main.html";
 			break;
-			case "report_inv_paid":
-				$data=$this->mbackend->getdata('report_paid','result_array');
+			case "report_inv_buku":
+			case "report_inv_detil_buku":
+			case "report_inv_media":
+			case "report_inv_detil_media":
+				$data=$this->mbackend->getdata('report','result_array',$mod);
+				//print_r($data);
 				$this->nsmarty->assign('data',$data);
+				$kat=$this->input->post('type_trans');
+				$this->nsmarty->assign('kat',$kat);
 			break;
-			case "report_inv_unpaid":
-				$data=$this->mbackend->getdata('report_unpaid','result_array');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "report_unit":
-				$data=$this->mbackend->getdata('report_unit','result_array');
-				$this->nsmarty->assign('data',$data);
-			break;
-			case "report_registrasi":
-				$data=$this->mbackend->getdata('report_registrasi','result_array');
-				$this->nsmarty->assign('data',$data);
-			break;
+			
 		}
 		$this->nsmarty->assign('temp',$temp);
 		if(!file_exists($this->config->item('appl').APPPATH.'views/'.$temp)){$this->nsmarty->display('konstruksi.html');}
@@ -388,25 +383,30 @@ class Backend extends JINGGA_Controller {
 	function cetak(){
 		$mod=$this->input->post('mod');
 			switch($mod){
-				case "cetak_bast":
-					$data=$this->mbackend->getdata('get_bast');
-					$tgl=$this->konversi_tgl(date('Y-m-d'));
-					$file_name=$data['header']['konfirmasi_no'];
-					$this->hasil_output('pdf',$mod,$data,$file_name,'BERITA ACARA SERAH TERIMA BUKU',$data['header']['konfirmasi_no'],$tgl);
+				case "inv_buku_SEKOLAH":
+				case "inv_buku_UMUM":
+					$mod_na="report_".$this->input->post('mod_na');
+					$judul=$this->input->post('judul');
+					$data=$this->mbackend->getdata('report','result_array',$mod_na);
+					//$data=$this->mbackend->getdata('get_lap_rekap','result_array');
+					$file_name=$this->input->post('mod');
 				break;
 			}
+		$this->hasil_output('pdf',$mod,$data,$file_name,$judul);
 	}
 	function hasil_output($p1,$mod,$data,$file_name,$judul_header,$nomor="",$param=""){
 		switch($p1){
 			case "pdf":
 				$this->load->library('mlpdf');	
 				//$data=$this->mhome->getdata('cetak_voucher');
+				if($this->input->post('type_trans'))$this->nsmarty->assign('kat',$this->input->post('type_trans'));
 				$pdf = $this->mlpdf->load();
 				$this->nsmarty->assign('param', $param);
 				$this->nsmarty->assign('judul_header', $judul_header);
 				$this->nsmarty->assign('nomor', $nomor);
 				$this->nsmarty->assign('data', $data);
 				$this->nsmarty->assign('mod', $mod);
+				
 				
 				$htmlcontent = $this->nsmarty->fetch("backend/template/temp_pdf.html");
 				$htmlheader = $this->nsmarty->fetch("backend/template/header.html");
