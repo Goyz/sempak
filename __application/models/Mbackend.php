@@ -34,12 +34,12 @@ class Mbackend extends CI_Model{
 								from tbl_d_pemesanan A 
 								LEFT JOIN tbl_h_pemesanan B ON A.tbl_h_pemesanan_id=B.id
 								LEFT JOIN tbl_registrasi C ON B.tbl_registrasi_id=C.id
-								WHERE C.jenis_pembeli='".$kat."' 
+								WHERE B.kode_marketing='".$this->auth['member_user']."' AND C.jenis_pembeli='".$kat."' 
 								AND B.create_date BETWEEN '".$tgl_mulai."' AND '".$tgl_akhir." 23:59:00'
 								GROUP BY A.tbl_h_pemesanan_id
 							)AS F ON F.tbl_h_pemesanan_id=A.id
 							LEFT JOIN tbl_konfirmasi G ON G.tbl_h_pemesanan_id=A.id
-							WHERE B.jenis_pembeli='".$kat."' 
+							WHERE A.kode_marketing='".$this->auth['member_user']."' AND B.jenis_pembeli='".$kat."' 
 							AND A.create_date BETWEEN '".$tgl_mulai."' AND '".$tgl_akhir." 23:59:00'";
 							//echo  $sql;
 					break;
@@ -50,7 +50,7 @@ class Mbackend extends CI_Model{
 							from tbl_d_pemesanan A 
 							LEFT JOIN tbl_h_pemesanan B ON A.tbl_h_pemesanan_id=B.id 
 							LEFT JOIN tbl_registrasi C ON B.tbl_registrasi_id=C.id 
-							WHERE C.jenis_pembeli='".$kat."' 
+							WHERE B.kode_marketing='".$this->auth['member_user']."' AND C.jenis_pembeli='".$kat."' 
 							AND B.tgl_order BETWEEN '".$tgl_mulai."' AND '".$tgl_akhir." 23:59:00'
 							GROUP BY A.tbl_h_pemesanan_id ";
 							
@@ -71,7 +71,8 @@ class Mbackend extends CI_Model{
 									LEFT JOIN tbl_h_pemesanan B ON A.tbl_h_pemesanan_id=B.id
 									LEFT JOIN tbl_buku C ON A.tbl_buku_id=C.id
 									LEFT JOIN tbl_registrasi D ON B.tbl_registrasi_id=D.id
-									WHERE D.jenis_pembeli='".$kat."' AND A.tbl_h_pemesanan_id=".$v['id_header'];
+									WHERE B.kode_marketing='".$this->auth['member_user']."' 
+									AND D.jenis_pembeli='".$kat."' AND A.tbl_h_pemesanan_id=".$v['id_header'];
 							$det=$this->db_remote->query($sql)->result_array();
 							//print_r($det);exit;
 							if(count($det)>0){
@@ -97,12 +98,14 @@ class Mbackend extends CI_Model{
 								from tbl_d_pemesanan A 
 								LEFT JOIN tbl_h_pemesanan B ON A.tbl_h_pemesanan_id=B.id
 								LEFT JOIN tbl_registrasi C ON B.tbl_registrasi_id=C.id
-								WHERE C.jenis_pembeli='".$kat."' 
+								WHERE B.kode_marketing='".$this->auth['member_user']."' 
+								AND C.jenis_pembeli='".$kat."' 
 								AND B.create_date BETWEEN '".$tgl_mulai."' AND '".$tgl_akhir." 23:59:00'
 								GROUP BY A.tbl_h_pemesanan_id
 							)AS F ON F.tbl_h_pemesanan_id=A.id
 							LEFT JOIN tbl_konfirmasi G ON G.tbl_h_pemesanan_id=A.id
-							WHERE B.jenis_pembeli='".$kat."' 
+							WHERE A.kode_marketing='".$this->auth['member_user']."' 
+							AND B.jenis_pembeli='".$kat."' 
 							AND A.create_date BETWEEN '".$tgl_mulai."' AND '".$tgl_akhir." 23:59:00'";
 							//echo  $sql;
 					break;
@@ -113,7 +116,8 @@ class Mbackend extends CI_Model{
 							from tbl_d_pemesanan A 
 							LEFT JOIN tbl_h_pemesanan B ON A.tbl_h_pemesanan_id=B.id 
 							LEFT JOIN tbl_registrasi C ON B.tbl_registrasi_id=C.id 
-							WHERE C.jenis_pembeli='".$kat."' 
+							WHERE B.kode_marketing='".$this->auth['member_user']."' 
+							AND C.jenis_pembeli='".$kat."' 
 							AND B.tgl_order BETWEEN '".$tgl_mulai."' AND '".$tgl_akhir." 23:59:00'
 							GROUP BY A.tbl_h_pemesanan_id ";
 							
@@ -134,7 +138,8 @@ class Mbackend extends CI_Model{
 									LEFT JOIN tbl_h_pemesanan B ON A.tbl_h_pemesanan_id=B.id
 									LEFT JOIN tbl_produk C ON A.tbl_produk_id=C.id
 									LEFT JOIN tbl_registrasi D ON B.tbl_registrasi_id=D.id
-									WHERE D.jenis_pembeli='".$kat."' AND A.tbl_h_pemesanan_id=".$v['id_header'];
+									WHERE B.kode_marketing='".$this->auth['member_user']."' 
+									AND D.jenis_pembeli='".$kat."' AND A.tbl_h_pemesanan_id=".$v['id_header'];
 							$det=$this->db_remote->query($sql)->result_array();
 							//print_r($det);exit;
 							if(count($det)>0){
@@ -160,18 +165,18 @@ class Mbackend extends CI_Model{
 				$order="ORDER BY A.tgl_order DESC
 						LIMIT 0,5 ";
 				$this->get_koneksi('B');
-				$where =" WHERE B.jenis_pembeli='SEKOLAH' ";
+				$where =" WHERE A.kode_marketing='".$this->auth['member_user']."' AND B.jenis_pembeli='SEKOLAH' ";
 				$sql=$sql_na.$where.$order;
 				$data['trans_buku_sekolah']=$this->db_remote->query($sql)->result_array();
-				$where =" WHERE B.jenis_pembeli='UMUM' ";
+				$where =" WHERE A.kode_marketing='".$this->auth['member_user']."' AND B.jenis_pembeli='UMUM' ";
 				$sql=$sql_na.$where.$order;
 				$data['trans_buku_umum']=$this->db_remote->query($sql)->result_array();
 				$this->db_remote->close();
 				$this->get_koneksi('M');
-				$where =" WHERE B.jenis_pembeli='SEKOLAH' ";
+				$where =" WHERE A.kode_marketing='".$this->auth['member_user']."' AND B.jenis_pembeli='SEKOLAH' ";
 				$sql=$sql_na.$where.$order;
 				$data['trans_media_sekolah']=$this->db_remote->query($sql)->result_array();
-				$where =" WHERE B.jenis_pembeli='UMUM' ";
+				$where =" WHERE A.kode_marketing='".$this->auth['member_user']."' AND B.jenis_pembeli='UMUM' ";
 				$sql=$sql_na.$where.$order;
 				$data['trans_media_umum']=$this->db_remote->query($sql)->result_array();
 				$this->db_remote->close();
@@ -192,7 +197,7 @@ class Mbackend extends CI_Model{
 						LEFT JOIN (
 							SELECT A.tbl_h_pemesanan_id,A.`status`,A.no_resi 
 							FROM tbl_tracking_pengiriman A
-						)AS D ON D.tbl_h_pemesanan_id=A.id ".$where;
+						)AS D ON D.tbl_h_pemesanan_id=A.id ".$where." AND A.kode_marketing='".$this->auth['member_user']."'";
 			break;
 			case "get_pemesanan_buku":
 				$data=array();
@@ -200,7 +205,7 @@ class Mbackend extends CI_Model{
 				if($id)$where .=" AND A.id=".$id;
 				$sql="SELECT A.*,B.nama_sekolah,B.nama_lengkap,B.jenis_pembeli 
 					  FROM tbl_h_pemesanan A 
-					  LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id ".$where;
+					  LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id ".$where." AND A.kode_marketing='".$this->auth['member_user']."'";
 				$data['header']=$this->db_remote->query($sql)->row_array();
 				$sql="SELECT A.*,B.judul_buku,(A.qty*A.harga)as total
 					  FROM tbl_d_pemesanan A 
@@ -215,7 +220,7 @@ class Mbackend extends CI_Model{
 				if($id)$where .=" AND A.id=".$id;
 				$sql="SELECT A.*,B.nama_sekolah,B.nama_lengkap,B.jenis_pembeli 
 					  FROM tbl_h_pemesanan A 
-					  LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id ".$where;
+					  LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id ".$where." AND A.kode_marketing='".$this->auth['member_user']."'";
 				$data['header']=$this->db_remote->query($sql)->row_array();
 				$sql="SELECT A.*,B.judul_produk,(A.qty*A.harga)as total
 					  FROM tbl_d_pemesanan A 
@@ -243,7 +248,7 @@ class Mbackend extends CI_Model{
 				$sql="SELECT A.*,B.nama_sekolah,B.nama_lengkap 
 					  FROM tbl_h_pemesanan A 
 					  LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id 
-					  ".$where."
+					  ".$where." AND A.kode_marketing='".$this->auth['member_user']."' 
 					  ORDER BY A.tgl_order DESC";
 				//echo $sql;
 			break;
