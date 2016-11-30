@@ -1217,7 +1217,7 @@ function get_report(mod,acak){
 		break;
 		case "report_inv_media":
 		case "report_inv_detil_media":
-			param['db_flag']='B';
+			param['db_flag']='M';
 		break;
 	}
 	$('#isi_report_'+acak).addClass('loading').html('');

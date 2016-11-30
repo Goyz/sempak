@@ -385,6 +385,12 @@ class Backend extends JINGGA_Controller {
 			switch($mod){
 				case "inv_buku_SEKOLAH":
 				case "inv_buku_UMUM":
+				case "inv_detil_buku_UMUM":
+				case "inv_detil_buku_SEKOLAH":
+				case "inv_media_SEKOLAH":
+				case "inv_media_UMUM":
+				case "inv_detil_media_UMUM":
+				case "inv_detil_media_SEKOLAH":
 					$mod_na="report_".$this->input->post('mod_na');
 					$judul=$this->input->post('judul');
 					$data=$this->mbackend->getdata('report','result_array',$mod_na);

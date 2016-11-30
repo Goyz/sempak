@@ -84,6 +84,69 @@ class Mbackend extends CI_Model{
 					$this->db_remote->close();
 					return $data;
 					break;
+					case "report_inv_media":
+						$sql="SELECT A.*,B.nama_sekolah,B.nama_kepala_sekolah as pic,B.npsn,B.nama_lengkap,
+							B.alamat_pengiriman,B.no_telp_sekolah,B.no_hp_kepsek,B.email,E.kab_kota,
+							C.provinsi,F.jml_buku,G.total_pembayaran
+							FROM tbl_h_pemesanan A
+							LEFT JOIN tbl_registrasi B ON A.tbl_registrasi_id=B.id
+							LEFT JOIN cl_provinsi C ON B.cl_provinsi_kode=C.kode_prov
+							LEFT JOIN cl_kab_kota E ON B.cl_kab_kota_kode=E.kode_kab_kota
+							LEFT JOIN (
+								SELECT A.tbl_h_pemesanan_id,SUM(A.qty)as jml_buku 
+								from tbl_d_pemesanan A 
+								LEFT JOIN tbl_h_pemesanan B ON A.tbl_h_pemesanan_id=B.id
+								LEFT JOIN tbl_registrasi C ON B.tbl_registrasi_id=C.id
+								WHERE C.jenis_pembeli='".$kat."' 
+								AND B.create_date BETWEEN '".$tgl_mulai."' AND '".$tgl_akhir." 23:59:00'
+								GROUP BY A.tbl_h_pemesanan_id
+							)AS F ON F.tbl_h_pemesanan_id=A.id
+							LEFT JOIN tbl_konfirmasi G ON G.tbl_h_pemesanan_id=A.id
+							WHERE B.jenis_pembeli='".$kat."' 
+							AND A.create_date BETWEEN '".$tgl_mulai."' AND '".$tgl_akhir." 23:59:00'";
+							//echo  $sql;
+					break;
+					case "report_inv_detil_media":
+						$sql="SELECT A.tbl_h_pemesanan_id,SUM(A.qty)as jml_buku,
+							CONCAT(C.nama_sekolah,' [',C.npsn,']')as sekolah,C.nama_lengkap,
+							B.no_order,B.sub_total,B.pajak,B.grand_total,B.id as id_header  
+							from tbl_d_pemesanan A 
+							LEFT JOIN tbl_h_pemesanan B ON A.tbl_h_pemesanan_id=B.id 
+							LEFT JOIN tbl_registrasi C ON B.tbl_registrasi_id=C.id 
+							WHERE C.jenis_pembeli='".$kat."' 
+							AND B.tgl_order BETWEEN '".$tgl_mulai."' AND '".$tgl_akhir." 23:59:00'
+							GROUP BY A.tbl_h_pemesanan_id ";
+							
+					$data=array();
+					$res=$this->db_remote->query($sql)->result_array();
+					if(count($res)>0){
+						foreach($res as $x=>$v){
+							$data[$x]=array();
+							$data[$x]['no_order']=$v['no_order'];
+							$data[$x]['sekolah']=$v['sekolah'];
+							$data[$x]['nama_lengkap']=$v['nama_lengkap'];
+							$data[$x]['sub_total']=$v['sub_total'];
+							$data[$x]['pajak']=$v['pajak'];
+							$data[$x]['grand_total']=$v['grand_total'];
+							$data[$x]['jml_buku']=$v['jml_buku'];
+							$sql="SELECT A.*,B.no_order,CONCAT(D.nama_sekolah,' (',D.npsn,')')as sekolah,D.nama_lengkap,C.judul_produk as judul_buku
+									FROM tbl_d_pemesanan A
+									LEFT JOIN tbl_h_pemesanan B ON A.tbl_h_pemesanan_id=B.id
+									LEFT JOIN tbl_produk C ON A.tbl_produk_id=C.id
+									LEFT JOIN tbl_registrasi D ON B.tbl_registrasi_id=D.id
+									WHERE D.jenis_pembeli='".$kat."' AND A.tbl_h_pemesanan_id=".$v['id_header'];
+							$det=$this->db_remote->query($sql)->result_array();
+							//print_r($det);exit;
+							if(count($det)>0){
+								$data[$x]['detil']=$det;
+							}
+							
+						}
+					}
+					//echo "<pre>";print_r($data);exit;
+					$this->db_remote->close();
+					return $data;
+					break;
 				}
 				
 				
