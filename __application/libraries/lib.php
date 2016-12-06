@@ -115,6 +115,7 @@ class lib {
 			case "email_register":
 				$ci->nsmarty->assign('email', $email);
 				$ci->nsmarty->assign('password', $p1);
+				$ci->nsmarty->assign('kodemarketing', $p2);
 				$html = $ci->nsmarty->fetch('backend/email-register.html');
 				$subject = "EMAIL REGISTRASI TOOLS MARKETING ALDEAZ";
 			break;

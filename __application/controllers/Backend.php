@@ -515,4 +515,20 @@ class Backend extends JINGGA_Controller {
 		}
 		echo json_encode($chart);
 	}
+	
+	function getdisplay($type=""){
+		switch($type){
+			case "user_profile":
+				$dataprofil = $this->mbackend->getdata('userprofile', 'row_array');
+				$this->nsmarty->assign("data", $dataprofil);
+				$temp = 'backend/modul/setting/user_profile.html';
+			break;
+			case "ubah_password":
+				$temp = 'backend/modul/setting/ubah_password.html';
+			break;
+		}
+		
+		if(!file_exists($this->config->item('appl').APPPATH.'views/'.$temp)){$this->nsmarty->display('konstruksi.html');}
+		else{$this->nsmarty->display($temp);}
+	}
 }

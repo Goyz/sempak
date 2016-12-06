@@ -252,6 +252,19 @@ class Mbackend extends CI_Model{
 					  ORDER BY A.tgl_order DESC";
 				//echo $sql;
 			break;
+			
+			case "userprofile":
+				$sql = "
+					SELECT A.*, B.member_user, C.provinsi, D.kab_kota, E.kecamatan
+					FROM tbl_registration A
+					LEFT JOIN tbl_member B ON B.tbl_registration_id = A.id
+					LEFT JOIN cl_provinsi C ON C.kode_prov = A.cl_provinsi_id
+					LEFT JOIN cl_kab_kota D ON D.kode_kab_kota = A.cl_kab_kota_id
+					LEFT JOIN cl_kecamatan E ON E.kode_kecamatan = A.cl_kecamatan_id
+					WHERE A.email_address = '".$this->auth['email_address']."'
+				";
+			break;
+			
 			default:
 				if($balikan=='get'){$where .=" AND A.id=".$this->input->post('id');}
 				$sql="SELECT A.* FROM ".$type." A ".$where;

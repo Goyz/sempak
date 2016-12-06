@@ -86,8 +86,9 @@ class Login extends JINGGA_Controller {
 		if($register){
 			$getregister = $this->db->get_where('tbl_registration', array('email_address'=>$post['edMail']) )->row_array();
 			$pswd = $this->lib->randomString(6, 'huruf');
+			$member_user = $post['edProvID'].$post['edKabKotaID'].$post['edKecID']."-".$this->lib->randomString(5, 'angkahuruf');
 			$array_member = array(
-				'member_user' => $this->lib->randomString(5, 'angkahuruf'),
+				'member_user' => $member_user,
 				'email_address' => $post['edMail'],
 				'pwd' => $this->encrypt->encode($pswd),
 				'tbl_registration_id' => $getregister['id'],
@@ -97,7 +98,7 @@ class Login extends JINGGA_Controller {
 			);
 			$member = $this->db->insert('tbl_member', $array_member);
 			if($member){
-				$kirim_email = $this->lib->kirimemail('email_register', $post['edMail'], $pswd);
+				$kirim_email = $this->lib->kirimemail('email_register', $post['edMail'], $pswd, $member_user);
 				if($kirim_email){
 					echo 1;
 				}

@@ -24,6 +24,10 @@ $route['getkab'] = 'login/getcombo/cl_kab_kota';
 $route['getkec'] = 'login/getcombo/cl_kecamatan';
 $route['backoffice-Cetak'] = 'backend/cetak';
 
+$route['user-profile'] = 'backend/getdisplay/user_profile';
+$route['ubah-password'] = 'backend/getdisplay/ubah_password';
+
+
 
 
 /* Routes Front End Routes */
