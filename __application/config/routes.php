@@ -25,7 +25,9 @@ $route['getkec'] = 'login/getcombo/cl_kecamatan';
 $route['backoffice-Cetak'] = 'backend/cetak';
 
 $route['user-profile'] = 'backend/getdisplay/user_profile';
+$route['submit-ubahprofil'] = 'backend/simpandata/update_profile/edit';
 $route['ubah-password'] = 'backend/getdisplay/ubah_password';
+$route['submit-ubahpassword'] = 'backend/simpandata/ubah_password/edit';
 
 
 

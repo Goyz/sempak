@@ -387,71 +387,51 @@ class Mbackend extends CI_Model{
 		}
 		
 		switch($table){
-			case "reservation":
-				$table="tbl_reservation";
+			case "update_profile":
+				$table = "tbl_registration";
+				$arrayparam = array(
+					"email_address" => $this->auth['email_address']
+				);
+				$data['nama_lengkap'] = $data['nlengkap'];
+				$data['kode_pos'] = $data['kdpos'];
+				$data['alamat'] = $data['alamatpalsu'];
+				$data['no_ktp'] = $data['ktp'];
+				$data['no_handphone'] = $data['hp'];
+				
+				unset($data['nlengkap']);
+				unset($data['kdpos']);
+				unset($data['alamatpalsu']);
+				unset($data['ktp']);
+				unset($data['hp']);
 			break;
-			case "planning":
-			case "planning_package":
-				if($table=='planning_package')$table='tbl_execution_transaction_package';
-				else $table='tbl_execution_transaction';
-				if($sts_crud=='edit'){
-					if(isset($data['flag'])){$data['finish_date']=date('Y-m-d H:i:s');}
+			case "ubah_password":
+				$this->load->library('encrypt');
+				$password_lama = $this->encrypt->decode($this->auth['pwd']);
+				if($data['oldpass'] != $password_lama){
+					echo 2;
+					exit;
 				}
-				if($sts_crud=='add'){$data['flag']='P';}
-				//echo $sts_crud;exit;
-				//print_r($_POST);exit;
-			break;
-			case "package":
-				$table='tbl_package_header';
-				if($sts_crud=='add'){
-					if($data['tbl_services_id']==5){$data['flag_log_owner']=0;}
-					else $data['flag_log_owner']=1;
-				}
-				if($sts_crud=='delete'){
-					$this->db->delete('tbl_package_detil',array('tbl_package_header_id'=>$id));
-				}
-			break;
-			case "package_item":
-				$table='tbl_package_detil';
-			break;
-			
-			case "services":
-				$table='tbl_services';
-				if($sts_crud=='add_new')$sts_crud='add';$data['flag']='F';
-				if($sts_crud=='delete'){
-					$sql="SELECT * FROM tbl_services where pid=".$id;
-					$ex=$this->db->query($sql)->result_array();
-					if(count($ex)>0){
-						foreach($ex as $v){
-							$this->db->delete('tbl_services',array('pid'=>$v['id']));
-						}
-					}
-					$this->db->delete('tbl_services',array('pid'=>$id));
-				}
-				//print_r($data);exit;
-			break;
-			case "pricing":
-				$table='tbl_pricing_services';
-			break;
-			case "property":
-				$table='tbl_unit_member';
+				
+				$table = "tbl_member";
+				$arrayparam = array(
+					"email_address" => $this->auth['email_address']
+				);
+				$data['pwd'] = $this->encrypt->encode($data['newpass']);
+				
+				unset($data['newpass']);
+				unset($data['oldpass']);
 			break;
 		}
 		
 		switch ($sts_crud){
 			case "add":
-				if($table!='tbl_registration'){
-					$data['create_date'] = date('Y-m-d H:i:s');
-					$data['create_by'] = $this->auth['nama_user'];
-				}
 				$this->db->insert($table,$data);
 			break;
 			case "edit":
-				$this->db->update($table, $data, array('id' => $id) );
-				
+				$this->db->update($table, $data, $arrayparam);
 			break;
 			case "delete":
-				$this->db->delete($table, array('id' => $id));
+				$this->db->delete($table, $arrayparam);
 			break;
 		}
 		

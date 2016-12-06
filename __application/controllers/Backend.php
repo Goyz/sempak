@@ -278,8 +278,10 @@ class Backend extends JINGGA_Controller {
 		$post = array();
         foreach($_POST as $k=>$v){
 			if($this->input->post($k)!=""){
-				//$post[$k] = $this->db->escape_str($this->input->post($k));
-				$post[$k] = $this->input->post($k);
+				$post[$k] = $this->db->escape_str($this->input->post($k));
+				//$post[$k] = $this->input->post($k);
+			}else{
+				$post[$k] = null;
 			}
 			
 		}
@@ -530,5 +532,11 @@ class Backend extends JINGGA_Controller {
 		
 		if(!file_exists($this->config->item('appl').APPPATH.'views/'.$temp)){$this->nsmarty->display('konstruksi.html');}
 		else{$this->nsmarty->display($temp);}
+	}
+	
+	function testblay(){
+		echo "<pre>";
+		print_r($this->auth);
+		exit;
 	}
 }
